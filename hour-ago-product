@@ -21,3 +21,8 @@
     wp_reset_postdata();
   ?>
 </ul><!--/.products-->
+
+
+// UNTUK Week dan month
+ 'after' => '1 week ago'
+ 'after' => '1 month ago'
