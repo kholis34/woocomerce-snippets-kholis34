@@ -1,0 +1,27 @@
+<?php
+  $args = array( 'post_type' => 'product', 'posts_per_page' => 6, 'product_cat' => 'apparel', 'orderby' => 'date' );
+  $loop = new WP_Query( $args );
+  while ( $loop->have_posts() ) : $loop->the_post(); global $product; ?>
+
+  <div class="col-4">
+    <figure class="figure">
+      <a href="<?php echo get_permalink( $loop->post->ID ) ?>">
+         <?php echo get_the_post_thumbnail($loop->post->ID, 'shop_catalog');?>
+      </a>
+      <div class="updetails">
+        <p class="price">$<?php echo $product->get_price(); ?></p>
+           <p class="offer"><?php woocommerce_show_product_sale_flash( $post, $product ); ?></p>
+      </div>
+      <figcaption class="figure-caption">
+        <h3 class="title"><?php echo the_title(); ?></h3>
+        <div class="rating">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/rating.png" class="img-fluid" />
+        </div>
+        <p class="description">Lightweight nylon and T-back design for a comfortable fit. Junior Sizes...</p>
+        <div class="useraction">
+           <a href="#" class="wishlist" data-toggle="tooltip" title="Wishlist"><i class="fas fa-heart"></i></a>
+           <a href="#" class="addtocart" data-toggle="tooltip" title="Add To Cart"><i class="fas fa-cart-plus"></i> Add To Cart</a>
+           <a href="#" class="quickview" data-toggle="tooltip" title="Quickview"><i class="fas fa-eye"></i></a>
+        </div>
+     </figcaption>
+ </figure>
