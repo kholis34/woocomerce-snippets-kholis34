@@ -1,0 +1,3 @@
+//Memanggil Filter bar
+
+<?php woocommerce_catalog_ordering(); ?>
