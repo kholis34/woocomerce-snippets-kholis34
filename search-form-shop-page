@@ -1,0 +1,33 @@
+//=== Funnction.php ===
+function search_form() {
+
+    if (is_shop()) { ?>
+
+    <div class="search_form">
+        <?php echo do_shortcode('[search_form]') ?>
+    </div>
+    <?php }
+}
+add_action('woocommerce_before_main_content', 'shop_page_header', 10);
+add_action( 'woocommerce_before_main_content', 'woocommerce_catalog_ordering', 20 ); 
+add_action('woocommerce_archive_description', 'search_form', 30);
+
+//=== Creat shortcode [search-form] ====
+add_shortcode('search_form', 'search_form_func');
+function search_form_func( $args ) {
+  ob_start();
+  ?> 
+ <?php
+$form = '<form role="search" method="get" id="searchform" action="' . esc_url( home_url( '/' ) ) . '">
+ <label class="screen-reader-text" for="s">' . __( 'Search for:', 'woocommerce' ) . '</label>
+ <input class="search_input_product" type="text" value="' . get_search_query() . '" name="s" id="s" placeholder="' . __( 'Search Products', 'woocommerce' ) . '" />
+ <input type="hidden" name="post_type" value="product" />
+</form>
+';
+echo $form;?> 
+
+
+    <?php
+
+  return ob_get_clean();
+}
