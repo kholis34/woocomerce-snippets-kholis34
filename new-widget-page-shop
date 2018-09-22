@@ -1,0 +1,24 @@
+/**
+ * Register new Widget area for Product Cat sort dropdown untuk Shop Page.
+ */
+add_action( 'widgets_init', 'wb_extra_widgets' );
+function wb_extra_widgets() {
+    register_sidebar( array(
+        'id'            => 'prod_sort',
+        'name'          => __( 'Product Cat Sort', 'themename' ),
+        'description'   => __( 'This site below Shop Title', 'themename' ),
+        'before_widget' => '<div>',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widgettitle">',
+        'after_title'   => '</h3>'
+    ) );
+}
+add_action( 'woocommerce_before_shop_loop','wb_prod_sort' ); // Hook it after headline and before loop
+/**
+ * Position the Product Category Sort dropdown.
+ */
+function wb_prod_sort() {
+    if ( is_active_sidebar( 'prod_sort' ) ) {
+        dynamic_sidebar( 'prod_sort' );
+    }
+}
