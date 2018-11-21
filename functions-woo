@@ -1,0 +1,97 @@
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Change number of related products on product page
+ * Set your own value for 'posts_per_page'
+ *
+ */ 
+function woo_related_products_limit() {
+  global $product;
+	
+	$args['posts_per_page'] = 6;
+	return $args;
+}
+add_filter( 'woocommerce_output_related_products_args', 'jk_related_products_args' );
+  function jk_related_products_args( $args ) {
+	$args['posts_per_page'] = 3; // 4 related products
+	$args['columns'] = 3; // arranged in 2 columns
+	return $args;
+}
+//
+/**
+ * Add Cart icon and count to header if WC is active
+ */
+function my_wc_cart_count() {
+ 
+    if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+ 
+        $count = WC()->cart->cart_contents_count;
+        ?><a class="cart-contents" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php
+        if ( $count > 0 ) {
+            ?>
+            <span class="cart-contents-count"><?php echo esc_html( $count ); ?></span>
+            <?php
+        }
+                ?></a><?php
+    }
+ 
+}
+add_action( 'kholis_top', 'my_wc_cart_count' );
+/**
+ * Ensure cart contents update when products are added to the cart via AJAX
+ */
+function my_header_add_to_cart_fragment( $fragments ) {
+ 
+    ob_start();
+    $count = WC()->cart->cart_contents_count;
+    ?><a class="cart-contents" href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php
+    if ( $count > 0 ) {
+        ?>
+        <span class="cart-contents-count"><?php echo esc_html( $count ); ?></span>
+        <?php            
+    }
+        ?></a><?php
+ 
+    $fragments['a.cart-contents'] = ob_get_clean();
+     
+    return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'my_header_add_to_cart_fragment' );
+/**
+ * @snippet       Change No. of Thumbnails per Row @ Product Gallery | WooCommerce
+ * @how-to        Watch tutorial @ https://businessbloomer.com/?p=19055
+ * @sourcecode    https://businessbloomer.com/?p=67117
+ * @author        Rodolfo Melogli
+ * @testedwith    WooCommerce 3.0.5
+ */
+
+add_filter( 'woocommerce_single_product_image_gallery_classes', 'bbloomer_5_columns_product_gallery' );
+
+function bbloomer_5_columns_product_gallery( $wrapper_classes ) {
+$columns = 5; // change this to 2, 3, 5, etc. Default is 4.
+$wrapper_classes[2] = 'woocommerce-product-gallery--columns-' . absint( $columns );
+return $wrapper_classes;
+}
+
+// Create array with product categories that belong to current product
+$cats = get_the_terms( $post->ID, 'product_cat' );
+if ( ! empty( $cats ) && ! is_wp_error( $cats ) ) {
+// Loop through the product categories...
+        foreach ( $cats as $term ) {
+ 
+                        // If parent cat ID = 116 echo subcat name...
+            if( $term->parent == 116 ) { echo $term->name; }
+ 
+        }
+ 
+        }
+    /**
+ * Change number or products per row to 3
+ */
+add_filter('loop_shop_columns', 'loop_columns');
+if (!function_exists('loop_columns')) {
+	function loop_columns() {
+		return 3; // 3 products per row
+	}
+}
